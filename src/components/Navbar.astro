@@ -1,0 +1,430 @@
+---
+import { site } from '../data/site.js';
+import { ui } from '../data/ui.js';
+import { hasContent } from '../lib/sections.js';
+import Button from './Button.astro';
+
+const isIndex = Astro.url.pathname === '/' || Astro.url.pathname === '';
+
+const resolveHref = (href: string) => {
+  if (isIndex) return href;
+  if (href.startsWith('#')) return `/${href}`;
+  return href;
+};
+
+const visibleNav = site.nav.filter((item) => {
+  if (item.section) {
+    if (!site.sections || site.sections[item.section] !== true) {
+      return false;
+    }
+    if (!hasContent(item.section)) {
+      return false;
+    }
+  }
+  return true;
+});
+---
+
+<header class="navbar" data-navbar>
+  <div class="container navbar__inner">
+    <a href={resolveHref('#home')} class="navbar__logo">
+      <span class="navbar__brand-first">{site.brand.first}</span><span class="navbar__brand-second">{site.brand.second}</span>
+    </a>
+
+    <nav class="navbar__nav-desktop" aria-label={ui.navLabel}>
+      <ul class="navbar__list">
+        {visibleNav.map((item) => (
+          <li class="navbar__item">
+            {item.variant === 'outline' ? (
+              <Button href={resolveHref(item.href)} variant="outline" size="sm" data-nav-link>
+                {item.label}
+              </Button>
+            ) : (
+              <a href={resolveHref(item.href)} class="navbar__link" data-nav-link>
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      class="navbar__toggle"
+      data-toggle
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label={ui.menuOpen}
+      data-label-open={ui.menuOpen}
+      data-label-close={ui.menuClose}
+    >
+      <svg class="navbar__hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="4" y1="6" x2="20" y2="6" class="navbar__line navbar__line--top" />
+        <line x1="4" y1="12" x2="20" y2="12" class="navbar__line navbar__line--mid" />
+        <line x1="4" y1="18" x2="20" y2="18" class="navbar__line navbar__line--bot" />
+      </svg>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="navbar__mobile-menu" data-menu hidden>
+    <nav aria-label={ui.navLabel}>
+      <ul class="navbar__mobile-list">
+        {visibleNav.map((item) => (
+          <li class="navbar__mobile-item">
+            {item.variant === 'outline' ? (
+              <Button href={resolveHref(item.href)} variant="outline" size="sm" class="btn--full" data-nav-link>
+                {item.label}
+              </Button>
+            ) : (
+              <a href={resolveHref(item.href)} class="navbar__mobile-link" data-nav-link>
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    background-color: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color var(--dur) var(--ease);
+  }
+
+  .navbar.is-scrolled {
+    border-bottom-color: var(--border);
+  }
+
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .navbar__logo {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: var(--fw-semibold);
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .navbar__brand-first {
+    color: var(--accent-text);
+  }
+
+  .navbar__brand-second {
+    color: var(--text);
+  }
+
+  .navbar__nav-desktop {
+    display: none;
+  }
+
+  .navbar__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar__item {
+    list-style: none;
+  }
+
+  .navbar__link {
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+    color: var(--text);
+    text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+
+  .navbar__link:hover,
+  .navbar__link:active,
+  .navbar__link[aria-current="true"] {
+    color: var(--accent-text);
+  }
+
+  .navbar__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .navbar__hamburger-icon {
+    display: block;
+  }
+
+  .navbar__line {
+    transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
+    transform-origin: 12px 12px;
+  }
+
+  .navbar__toggle[aria-expanded="true"] .navbar__line--top {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .navbar__toggle[aria-expanded="true"] .navbar__line--mid {
+    opacity: 0;
+  }
+
+  .navbar__toggle[aria-expanded="true"] .navbar__line--bot {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .navbar__mobile-menu {
+    position: absolute;
+    top: var(--header-h);
+    left: 0;
+    width: 100%;
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: var(--space-5) var(--gutter);
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+
+  .navbar__mobile-menu.is-open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .navbar__mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar__mobile-item {
+    list-style: none;
+  }
+
+  .navbar__mobile-link {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
+    color: var(--text);
+    padding-inline: 0;
+    padding-block: var(--space-3);
+    text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+
+  .navbar__mobile-link:hover,
+  .navbar__mobile-link:active,
+  .navbar__mobile-link[aria-current="true"] {
+    color: var(--accent-text);
+  }
+
+  @media (min-width: 768px) {
+    .navbar__toggle {
+      display: none;
+    }
+
+    .navbar__nav-desktop {
+      display: block;
+    }
+
+    .navbar__mobile-menu {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .navbar,
+    .navbar__link,
+    .navbar__mobile-link,
+    .navbar__line,
+    .navbar__mobile-menu {
+      transition: none;
+    }
+
+    .navbar__mobile-menu {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector('[data-navbar]');
+  const toggle = document.querySelector('[data-toggle]');
+  const menu = document.querySelector('[data-menu]');
+  const html = document.documentElement;
+
+  // Scroll state (> 8px)
+  const updateScroll = () => {
+    if (window.scrollY > 8) {
+      header?.classList.add('is-scrolled');
+    } else {
+      header?.classList.remove('is-scrolled');
+    }
+  };
+  window.addEventListener('scroll', updateScroll, { passive: true });
+  updateScroll();
+
+  // Mobile menu open / close
+  const labelOpen = toggle?.getAttribute('data-label-open') || 'Buka menu';
+  const labelClose = toggle?.getAttribute('data-label-close') || 'Tutup menu';
+
+  const openMenu = () => {
+    toggle?.setAttribute('aria-expanded', 'true');
+    toggle?.setAttribute('aria-label', labelClose);
+    menu?.removeAttribute('hidden');
+    requestAnimationFrame(() => {
+      menu?.classList.add('is-open');
+    });
+    html.classList.add('menu-open');
+  };
+
+  const closeMenu = (returnFocus = false) => {
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', labelOpen);
+    menu?.classList.remove('is-open');
+    html.classList.remove('menu-open');
+
+    const handleTransitionEnd = () => {
+      if (!menu?.classList.contains('is-open')) {
+        menu?.setAttribute('hidden', '');
+      }
+      menu?.removeEventListener('transitionend', handleTransitionEnd);
+    };
+    menu?.addEventListener('transitionend', handleTransitionEnd);
+
+    setTimeout(() => {
+      if (!menu?.classList.contains('is-open')) {
+        menu?.setAttribute('hidden', '');
+      }
+    }, 200);
+
+    if (returnFocus) {
+      toggle?.focus();
+    }
+  };
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  // Close on nav link click
+  const navLinks = document.querySelectorAll('[data-nav-link]');
+  navLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      closeMenu();
+    });
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      closeMenu(true);
+    }
+  });
+
+  // Close on click outside navbar
+  document.addEventListener('click', (e) => {
+    if (
+      toggle?.getAttribute('aria-expanded') === 'true' &&
+      header &&
+      !header.contains(e.target as Node)
+    ) {
+      closeMenu();
+    }
+  });
+
+  // Close on viewport resize >= 768px
+  const mql = window.matchMedia('(min-width: 768px)');
+  mql.addEventListener('change', (e) => {
+    if (e.matches && toggle?.getAttribute('aria-expanded') === 'true') {
+      closeMenu();
+    }
+  });
+
+  // IntersectionObserver for active section highlight
+  const sectionsMap = new Map();
+  navLinks.forEach((link) => {
+    const href = link.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      const id = href.slice(1);
+      const target = document.getElementById(id);
+      if (target) {
+        if (!sectionsMap.has(id)) {
+          sectionsMap.set(id, []);
+        }
+        sectionsMap.get(id).push(link);
+      }
+    }
+  });
+
+  if (sectionsMap.size > 0 && 'IntersectionObserver' in window) {
+    const visibleEntries = new Map();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          visibleEntries.set(entry.target.id, entry.isIntersecting);
+        });
+
+        const intersectingIds = Array.from(sectionsMap.keys()).filter((id) =>
+          visibleEntries.get(id)
+        );
+
+        let activeId = intersectingIds[0] || null;
+        if (!activeId && window.scrollY < 200 && sectionsMap.has('home')) {
+          activeId = 'home';
+        }
+
+        navLinks.forEach((link) => {
+          const href = link.getAttribute('href');
+          if (activeId && href === `#${activeId}`) {
+            link.setAttribute('aria-current', 'true');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      },
+      {
+        rootMargin: '-15% 0px -65% 0px',
+        threshold: 0,
+      }
+    );
+
+    sectionsMap.forEach((_, id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  }
+</script>

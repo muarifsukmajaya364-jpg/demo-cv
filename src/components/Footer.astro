@@ -1,0 +1,132 @@
+---
+import { site } from '../data/site.js';
+import { profile } from '../data/profile.js';
+import { ui } from '../data/ui.js';
+import Button from './Button.astro';
+import Icon from './icons/Icon.astro';
+
+const year = new Date().getFullYear();
+const fullName = `${profile.name || ''} ${profile.nameHighlight || ''}`.trim();
+const copyrightText = (site.footer?.copyright || '© {year} {name}. Seluruh hak cipta dilindungi.')
+  .replace('{year}', String(year))
+  .replace('{name}', fullName);
+
+const backToTopText = site.footer?.backToTop || ui.backToTop;
+const credit = site.footer?.credit;
+const hasCredit = Boolean(credit?.href && credit.href.trim());
+---
+
+<footer class="footer">
+  <div class="container footer__container">
+    <div class="footer__left">
+      <a href="#home" class="footer__brand" aria-label={`Kembali ke beranda ${site.brand.first}${site.brand.second}`}>
+        <span class="footer__brand-first">{site.brand.first}</span><span class="footer__brand-second">{site.brand.second}</span>
+      </a>
+      <p class="footer__copyright">{copyrightText}</p>
+    </div>
+
+    <div class="footer__right">
+      <Button href="#main" variant="neutral" size="sm" class="footer__back-to-top">
+        <Icon name="arrow-up" size={16} />
+        <span>{backToTopText}</span>
+      </Button>
+
+      {hasCredit && (
+        <a
+          href={credit.href}
+          class="footer__credit"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {credit.label}
+        </a>
+      )}
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    padding-block: var(--space-7);
+    background-color: var(--bg);
+  }
+
+  .footer__container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 768px) {
+    .footer__container {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .footer__left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer__brand {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.125rem;
+    font-weight: var(--fw-semibold);
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .footer__brand-first {
+    color: var(--accent-text);
+  }
+
+  .footer__brand-second {
+    color: var(--text);
+  }
+
+  .footer__copyright {
+    margin: 0;
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    line-height: var(--lh-normal);
+  }
+
+  .footer__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 768px) {
+    .footer__right {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-4);
+    }
+  }
+
+  .footer__credit {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+
+  .footer__credit:hover {
+    color: var(--accent-text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer__credit {
+      transition: none;
+    }
+  }
+</style>

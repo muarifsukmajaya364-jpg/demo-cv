@@ -1,0 +1,107 @@
+---
+import '@fontsource/poppins/latin-400.css';
+import '@fontsource/poppins/latin-500.css';
+import '@fontsource/poppins/latin-600.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { site } from '../data/site.js';
+import { profile } from '../data/profile.js';
+import { services } from '../data/services.js';
+import { stats } from '../data/stats.js';
+import { projects } from '../data/projects.js';
+import { highlights } from '../data/highlights.js';
+import { testimonials } from '../data/testimonials.js';
+import { skills } from '../data/skills.js';
+import { contact } from '../data/contact.js';
+import { ui } from '../data/ui.js';
+import { validateData } from '../lib/validate.js';
+import { socialHref } from '../lib/links.js';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+// Validasi seluruh data saat build
+validateData({
+  site,
+  profile,
+  services,
+  stats,
+  projects,
+  highlights,
+  testimonials,
+  skills,
+  contact,
+  ui,
+});
+
+interface Props {
+  noindex?: boolean;
+}
+
+const { noindex = false } = Astro.props;
+const themeColor = site.theme.mode === 'light' ? '#ffffff' : '#0c0c0c';
+
+// SEO & Metadata
+const hasUrl = Boolean(site.url && site.url.trim());
+const finalUrl = hasUrl ? site.url.trim().replace(/\/+$/, '') : '';
+const canonicalUrl = finalUrl ? `${finalUrl}${Astro.url.pathname}` : '';
+
+const hasOgImage = Boolean(site.ogImage && site.ogImage.trim());
+const ogImageUrl = finalUrl && hasOgImage
+  ? `${finalUrl}${site.ogImage.startsWith('/') ? '' : '/'}${site.ogImage}`
+  : '';
+
+const twitterCard = hasOgImage ? 'summary_large_image' : 'summary';
+
+// JSON-LD Person schema
+const fullName = `${profile.name || ''} ${profile.nameHighlight || ''}`.trim();
+const allSocials = { ...(profile.social || {}), ...(contact.social || {}) };
+const sameAsLinks = Object.entries(allSocials)
+  .map(([k, v]) => socialHref(k, v))
+  .filter((h) => Boolean(h && (h.startsWith('http://') || h.startsWith('https://'))));
+const uniqueSameAs = [...new Set(sameAsLinks)];
+
+const personSchema: Record<string, any> = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: fullName || profile.name,
+};
+
+if (profile.role) personSchema.jobTitle = profile.role;
+if (profile.bio) personSchema.description = profile.bio;
+if (finalUrl) personSchema.url = finalUrl;
+if (finalUrl && profile.photo) {
+  personSchema.image = `${finalUrl}${profile.photo.startsWith('/') ? '' : '/'}${profile.photo}`;
+}
+if (uniqueSameAs.length > 0) {
+  personSchema.sameAs = uniqueSameAs;
+}
+---
+
+<!doctype html>
+<html lang={site.lang} data-theme={site.theme.mode} style={`--accent:${site.theme.accent}`}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{site.title}</title>
+    <meta name="description" content={site.description} />
+    <meta name="theme-color" content={themeColor} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:title" content={site.title} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={site.lang === 'id' ? 'id_ID' : site.lang} />
+    <meta name="twitter:card" content={twitterCard} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{ui.skipLink}</a>
+    <Navbar />
+    <slot />
+    <Footer />
+  </body>
+</html>

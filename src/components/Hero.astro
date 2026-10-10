@@ -1,0 +1,371 @@
+---
+import { profile } from '../data/profile.js';
+import Button from './Button.astro';
+import Icon from './icons/Icon.astro';
+import { socialMeta, socialHref } from '../lib/links.js';
+
+// CTA promotion rule
+const hasPrimary = Boolean(profile.cta?.primary?.href && profile.cta.primary.href.trim());
+const hasSecondary = Boolean(profile.cta?.secondary?.href && profile.cta.secondary.href.trim());
+const hasAnyCta = hasPrimary || hasSecondary;
+
+const primaryCta = hasPrimary ? profile.cta.primary : null;
+const secondaryCta = hasSecondary
+  ? {
+      label: profile.cta.secondary.label,
+      href: profile.cta.secondary.href,
+      variant: hasPrimary ? 'neutral' : 'primary',
+    }
+  : null;
+
+// Photo check: only render media column if photo is not empty
+const hasPhoto = Boolean(profile.photo && profile.photo.trim());
+
+// Social links list in fixed order: instagram, discord, whatsapp, email
+const socialKeys = ['instagram', 'discord', 'whatsapp', 'email'];
+const activeSocialLinks = socialKeys
+  .map((key) => {
+    const rawVal = profile.social?.[key];
+    const href = socialHref(key, rawVal);
+    if (!href) return null;
+    const meta = socialMeta[key];
+    const isExternal = href.startsWith('http://') || href.startsWith('https://');
+    return {
+      key,
+      href,
+      label: meta.label,
+      icon: meta.icon,
+      isExternal,
+    };
+  })
+  .filter(Boolean);
+
+const hasSocial = activeSocialLinks.length > 0;
+---
+
+<section id="home" class="hero">
+  <div class:list={['container', 'hero__inner', { 'hero__inner--no-media': !hasPhoto }]}>
+    <div class="hero__text">
+      {profile.greeting && <p class="hero__greeting">{profile.greeting}</p>}
+      <h1 class="hero__title">
+        {profile.intro && `${profile.intro} `}{profile.name && `${profile.name} `}{profile.nameHighlight && <span class="hero__accent">{profile.nameHighlight}</span>}
+      </h1>
+      {profile.role && <p class="hero__role">{profile.role}</p>}
+      {profile.bio && <p class="hero__bio">{profile.bio}</p>}
+
+      {hasAnyCta && (
+        <div class="hero__cta">
+          {primaryCta && (
+            <Button href={primaryCta.href} variant="primary">
+              {primaryCta.label}
+            </Button>
+          )}
+          {secondaryCta && (
+            <Button href={secondaryCta.href} variant={secondaryCta.variant}>
+              {secondaryCta.label}
+            </Button>
+          )}
+        </div>
+      )}
+    </div>
+
+    {hasPhoto && (
+      <div class="hero__media">
+        <div class="hero__frame">
+          <div class="hero__shape" aria-hidden="true" />
+          <svg
+            class="hero__deco-plus"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <line x1="10" y1="2" x2="10" y2="18" />
+            <line x1="2" y1="10" x2="18" y2="10" />
+          </svg>
+          <div class="hero__deco-circle" aria-hidden="true" />
+          <img
+            src={profile.photo}
+            alt={profile.photoAlt}
+            width="420"
+            height="525"
+            fetchpriority="high"
+            decoding="async"
+            class="hero__img"
+          />
+        </div>
+      </div>
+    )}
+
+    {hasSocial && (
+      <div class="hero__social">
+        {profile.socialLabel && <span class="hero__social-label">{profile.socialLabel}</span>}
+        <div class="hero__social-list">
+          {activeSocialLinks.map((item) => (
+            <a
+              href={item.href}
+              aria-label={item.label}
+              target={item.isExternal ? '_blank' : undefined}
+              rel={item.isExternal ? 'noopener noreferrer' : undefined}
+              class="hero__social-link"
+            >
+              <Icon name={item.icon} size={20} />
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    background: radial-gradient(
+      60% 60% at 78% 40%,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 70%
+    );
+    overflow: clip;
+    padding-block: clamp(40px, 10vw, 64px);
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    width: min(100% - 2 * var(--gutter), var(--container));
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+
+  .hero__text {
+    text-align: left;
+  }
+
+  .hero__greeting {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
+    color: var(--text);
+    margin: 0;
+  }
+
+  .hero__title {
+    font-size: var(--fs-h1);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text);
+    margin-top: var(--space-2);
+    margin-bottom: 0;
+  }
+
+  .hero__accent {
+    color: var(--accent-text);
+  }
+
+  .hero__role {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    margin-top: var(--space-3);
+    margin-bottom: 0;
+  }
+
+  .hero__role::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 2px;
+    background-color: var(--accent);
+    margin-top: var(--space-4);
+  }
+
+  .hero__bio {
+    font-size: var(--fs-body);
+    color: var(--text-muted);
+    max-width: 52ch;
+    margin-top: var(--space-5);
+    margin-bottom: 0;
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .hero__media {
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    margin-top: var(--space-7);
+    padding-top: var(--space-4);
+    padding-right: var(--space-6);
+    padding-bottom: var(--space-6);
+    padding-left: var(--space-3);
+    box-sizing: border-box;
+  }
+
+  .hero__frame {
+    position: relative;
+    width: 420px;
+    max-width: 100%;
+  }
+
+  .hero__shape {
+    position: absolute;
+    inset: 0;
+    transform: translate(6%, 6%) rotate(3deg);
+    background: linear-gradient(135deg, var(--accent), var(--accent-3));
+    border-radius: var(--radius-lg);
+    opacity: 0.9;
+    z-index: 0;
+  }
+
+  .hero__deco-plus {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    color: var(--accent-text);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .hero__deco-circle {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--accent-3);
+    opacity: 0.6;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .hero__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero__social {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-top: var(--space-4);
+  }
+
+  .hero__social-label {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  .hero__social-list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .hero__social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    transition:
+      background-color var(--dur) var(--ease),
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      transform var(--dur) var(--ease);
+  }
+
+  .hero__social-link:hover {
+    background-color: var(--accent);
+    color: var(--on-accent);
+    border-color: var(--accent);
+  }
+
+  .hero__social-link:active {
+    transform: translateY(1px);
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      display: flex;
+      align-items: center;
+      padding-block: clamp(48px, 7vw, 96px);
+      min-height: min(calc(100svh - var(--header-h)), 820px);
+      box-sizing: border-box;
+    }
+
+    .hero__inner {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      column-gap: var(--space-8);
+      row-gap: var(--space-4);
+      align-items: center;
+      width: min(100% - 2 * var(--gutter), var(--container));
+      margin-inline: auto;
+    }
+
+    .hero__text {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    .hero__media {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+      margin-inline: 0;
+      margin-top: 0;
+    }
+
+    .hero__social {
+      grid-column: 2;
+      grid-row: 2;
+      justify-content: flex-end;
+      margin-top: 0;
+    }
+
+    .hero__inner--no-media {
+      display: block;
+    }
+
+    .hero__inner--no-media .hero__text {
+      max-width: 640px;
+    }
+
+    .hero__inner--no-media .hero__social {
+      justify-content: flex-start;
+      margin-top: var(--space-6);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__social-link {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>

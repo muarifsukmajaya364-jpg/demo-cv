@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" fill="none">
+  <rect width="1280" height="800" fill="#f0fdfa"/>
+  <rect x="90" y="240" width="1100" height="320" rx="40" fill="#99f6e4" opacity="0.4"/>
+  <path d="M410 400H490" stroke="#f59e0b" stroke-width="6" stroke-dasharray="10 10" stroke-linecap="round"/>
+  <path d="M790 400H870" stroke="#f59e0b" stroke-width="6" stroke-dasharray="10 10" stroke-linecap="round"/>
+
+  <!-- Phone 1: Search & Listing -->
+  <rect x="130" y="90" width="280" height="620" rx="36" fill="#ffffff" stroke="#134e4a" stroke-width="8"/>
+  <rect x="225" y="112" width="90" height="12" rx="6" fill="#134e4a"/>
+  <rect x="158" y="148" width="224" height="36" rx="18" fill="#f0fdfa" stroke="#14b8a6" stroke-width="2"/>
+  <rect x="158" y="204" width="224" height="150" rx="14" fill="#99f6e4"/>
+  <rect x="174" y="314" width="120" height="22" rx="6" fill="#134e4a"/>
+  <rect x="158" y="372" width="224" height="150" rx="14" fill="#f0fdfa" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="174" y="388" width="192" height="80" rx="8" fill="#14b8a6"/>
+  <rect x="174" y="482" width="140" height="18" rx="5" fill="#134e4a"/>
+  <rect x="158" y="544" width="224" height="120" rx="14" fill="#f0fdfa" stroke="#99f6e4" stroke-width="3"/>
+
+  <!-- Phone 2: Room Detail & Booking -->
+  <rect x="500" y="65" width="280" height="650" rx="36" fill="#ffffff" stroke="#0f766e" stroke-width="8"/>
+  <rect x="595" y="87" width="90" height="12" rx="6" fill="#134e4a"/>
+  <rect x="528" y="122" width="224" height="190" rx="16" fill="#0f766e"/>
+  <circle cx="640" cy="217" r="46" fill="#99f6e4" opacity="0.5"/>
+  <rect x="528" y="334" width="160" height="24" rx="6" fill="#134e4a"/>
+  <rect x="528" y="370" width="200" height="14" rx="5" fill="#14b8a6"/>
+  <rect x="528" y="406" width="66" height="48" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="2"/>
+  <rect x="607" y="406" width="66" height="48" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="2"/>
+  <rect x="686" y="406" width="66" height="48" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="2"/>
+  <rect x="528" y="476" width="224" height="110" rx="12" fill="#f0fdfa"/>
+  <rect x="528" y="614" width="224" height="54" rx="14" fill="#f59e0b"/>
+
+  <!-- Phone 3: Payment Success -->
+  <rect x="870" y="90" width="280" height="620" rx="36" fill="#ffffff" stroke="#134e4a" stroke-width="8"/>
+  <rect x="965" y="112" width="90" height="12" rx="6" fill="#134e4a"/>
+  <circle cx="1010" cy="260" r="68" fill="#99f6e4"/>
+  <path d="M982 260L1002 280L1042 240" stroke="#134e4a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="920" y="356" width="180" height="22" rx="6" fill="#134e4a"/>
+  <rect x="940" y="392" width="140" height="14" rx="5" fill="#0f766e"/>
+  <rect x="900" y="436" width="220" height="150" rx="14" fill="#f0fdfa" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="922" y="462" width="176" height="14" rx="4" fill="#0f766e"/>
+  <rect x="922" y="494" width="140" height="14" rx="4" fill="#14b8a6"/>
+  <rect x="922" y="526" width="160" height="14" rx="4" fill="#134e4a"/>
+  <rect x="900" y="614" width="220" height="48" rx="12" fill="#0f766e"/>
+</svg>

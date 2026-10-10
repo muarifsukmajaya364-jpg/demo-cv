@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="1050" viewBox="0 0 840 1050" fill="none">
+  <rect width="840" height="1050" fill="#99f6e4"/>
+  <!-- Bentuk dekoratif 1: lingkaran besar di kanan atas -->
+  <circle cx="680" cy="210" r="180" fill="#f0fdfa" opacity="0.65"/>
+  <!-- Bentuk dekoratif 2: gelombang/kapsul miring di kiri bawah -->
+  <rect x="-60" y="680" width="380" height="180" rx="90" transform="rotate(-18 -60 680)" fill="#14b8a6" opacity="0.35"/>
+  <circle cx="170" cy="240" r="28" fill="#f59e0b"/>
+  <!-- Lingkaran halo belakang siluet -->
+  <circle cx="420" cy="430" r="220" fill="#f0fdfa"/>
+  <!-- Siluet abstrak orang: bahu dan badan -->
+  <path d="M160 1050C160 835 268 700 420 700C572 700 680 835 680 1050H160Z" fill="#0f766e"/>
+  <!-- Detail kerah / aksen bahu -->
+  <path d="M335 712C362 748 390 766 420 766C450 766 478 748 505 712L465 1050H375L335 712Z" fill="#134e4a"/>
+  <!-- Siluet abstrak orang: leher dan kepala bulat -->
+  <rect x="384" y="555" width="72" height="110" rx="36" fill="#134e4a"/>
+  <circle cx="420" cy="420" r="145" fill="#0f766e"/>
+  <!-- Aksen hijab/rambut abstrak minimalis tanpa fitur wajah -->
+  <path d="M275 420C275 339.919 339.919 275 420 275C500.081 275 565 339.919 565 420C565 448 556 474 542 496C516 432 472 395 420 395C368 395 324 432 298 496C284 474 275 448 275 420Z" fill="#134e4a"/>
+  <circle cx="525" cy="785" r="14" fill="#ffffff" opacity="0.85"/>
+</svg>

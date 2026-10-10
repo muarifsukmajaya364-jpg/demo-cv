@@ -1,0 +1,279 @@
+---
+import { contact } from '../data/contact.js';
+import { socialHref, instagramHref } from '../lib/links.js';
+import Button from './Button.astro';
+import Icon from './icons/Icon.astro';
+
+const rows = [
+  {
+    key: 'whatsapp',
+    value: contact.whatsapp,
+    icon: 'whatsapp',
+    href: socialHref('whatsapp', contact.whatsapp),
+    isExternal: true,
+  },
+  {
+    key: 'email',
+    value: contact.email,
+    icon: 'email',
+    href: socialHref('email', contact.email),
+    isExternal: false,
+  },
+  {
+    key: 'instagram',
+    value: contact.instagram,
+    icon: 'instagram',
+    href: instagramHref(contact.instagram),
+    isExternal: true,
+  },
+  {
+    key: 'location',
+    value: contact.location,
+    icon: 'map-pin',
+    href: null,
+    isExternal: false,
+  },
+];
+
+const activeRows = rows.filter((r) => typeof r.value === 'string' && r.value.trim() !== '');
+
+const waHref = socialHref('whatsapp', contact.whatsapp);
+const emailHref = socialHref('email', contact.email);
+
+// Tombol utama tunggal: hanya satu tombol yang dirender (WhatsApp jika valid; jika tidak, email jika valid; jika tidak ada keduanya, tanpa tombol)
+let ctaConfig = null;
+if (waHref) {
+  ctaConfig = {
+    href: waHref,
+    label: contact.cta?.label || 'Chat via WhatsApp',
+    icon: 'whatsapp',
+    isExternal: true,
+  };
+} else if (emailHref) {
+  ctaConfig = {
+    href: emailHref,
+    label: contact.cta?.emailLabel || 'Kirim Email',
+    icon: 'email',
+    isExternal: false,
+  };
+}
+---
+
+<section id="contact" class="section contact" aria-labelledby="contact-heading">
+  <div class="container">
+    <div class="contact__grid">
+      <div class="contact__main">
+        <h2 id="contact-heading" class="contact__heading">{contact.heading}</h2>
+        {contact.description && (
+          <p class="contact__desc">{contact.description}</p>
+        )}
+
+        {activeRows.length > 0 && (
+          <ul class="contact__list">
+            {activeRows.map((item) => (
+              <li class="contact__item">
+                <div class="contact__icon-box" aria-hidden="true">
+                  <Icon name={item.icon} size={20} />
+                </div>
+                <div class="contact__info">
+                  <span class="contact__label">{contact.labels?.[item.key] || item.key}</span>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      class="contact__link"
+                      target={item.isExternal ? '_blank' : undefined}
+                      rel={item.isExternal ? 'noopener noreferrer' : undefined}
+                    >
+                      {item.value}
+                    </a>
+                  ) : (
+                    <span class="contact__value">{item.value}</span>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {ctaConfig && (
+          <div class="contact__cta">
+            <Button
+              href={ctaConfig.href}
+              variant="primary"
+              size="md"
+              target={ctaConfig.isExternal ? '_blank' : undefined}
+              rel={ctaConfig.isExternal ? 'noopener noreferrer' : undefined}
+            >
+              <Icon name={ctaConfig.icon} size={20} />
+              <span>{ctaConfig.label}</span>
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <div class="contact__art" aria-hidden="true">
+        <div class="contact__art-box">
+          <div class="contact__ring contact__ring--outer"></div>
+          <div class="contact__ring contact__ring--middle"></div>
+          <div class="contact__ring contact__ring--inner"></div>
+          <div class="contact__dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .contact__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .contact__main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact__heading {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text);
+    margin: 0;
+  }
+
+  .contact__desc {
+    max-width: 48ch;
+    margin-top: var(--space-3);
+    margin-bottom: 0;
+    color: var(--text-muted);
+    font-size: var(--fs-body);
+    line-height: var(--lh-relaxed);
+  }
+
+  .contact__list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-6) 0 0 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .contact__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .contact__icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--accent-text);
+  }
+
+  .contact__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .contact__label {
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    line-height: var(--lh-tight);
+  }
+
+  .contact__link,
+  .contact__value {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
+    color: var(--text);
+    line-height: var(--lh-normal);
+  }
+
+  .contact__link {
+    text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+
+  .contact__link:hover {
+    color: var(--accent-text);
+    text-decoration: underline;
+  }
+
+  .contact__cta {
+    margin-top: var(--space-6);
+  }
+
+  /* Kolom kanan dekoratif: disembunyikan di bawah 1024px */
+  .contact__art {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .contact__art {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .contact__art-box {
+    aspect-ratio: 1;
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+    position: relative;
+  }
+
+  .contact__ring {
+    position: absolute;
+    border-radius: var(--radius-full);
+  }
+
+  .contact__ring--outer {
+    inset: 0;
+    border: 1px dashed var(--border-strong);
+  }
+
+  .contact__ring--middle {
+    inset: 15%;
+    border: 1px solid var(--border);
+  }
+
+  .contact__ring--inner {
+    inset: 30%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 40%, transparent), transparent 70%);
+  }
+
+  .contact__dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-full);
+    background-color: var(--accent);
+    top: 6.7%;
+    right: 25%;
+    transform: translate(50%, -50%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact__link {
+      transition: none;
+    }
+  }
+</style>

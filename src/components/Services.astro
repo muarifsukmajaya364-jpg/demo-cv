@@ -1,0 +1,218 @@
+---
+import { services, servicesMeta } from "../data/services.js";
+import { ui } from "../data/ui.js";
+import CarouselControls from "./CarouselControls.astro";
+import Icon from "./icons/Icon.astro";
+
+const hasServices = Array.isArray(services) && services.length > 0;
+const meta = servicesMeta || {
+  label: "Apa yang Saya Tawarkan",
+  heading: "Desain Profesional yang Berorientasi pada Kebutuhan Klien",
+};
+const initialActiveIndex = hasServices ? Math.floor(services.length / 2) : 0;
+---
+
+{hasServices && (
+  <section id="services" class="section" aria-labelledby="services-heading">
+    <div class="container">
+      <div class="services__header">
+        <p class="services__label">{meta.label}</p>
+        <h2 id="services-heading" class="services__heading">{meta.heading}</h2>
+      </div>
+
+      <div class="services__panel">
+        <div
+          data-carousel
+          data-start="center"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label={meta.heading}
+        >
+          <div class="services__track" data-carousel-track>
+            {services.map((service, i) => (
+              <article
+                class="services__card"
+                data-carousel-item
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${i + 1} dari ${services.length}`}
+                data-active={i === initialActiveIndex ? "true" : "false"}
+              >
+                <div class="services__card-icon">
+                  <Icon name={service.icon} size={40} />
+                </div>
+                <h3 class="services__card-title">{service.title}</h3>
+                <p class="services__card-desc">{service.description}</p>
+              </article>
+            ))}
+          </div>
+
+          <CarouselControls
+            count={services.length}
+            itemLabel={ui.servicesItem}
+            prevLabel={ui.servicesPrev}
+            nextLabel={ui.servicesNext}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  import { initCarousel } from "../lib/carousel.js";
+  document.querySelectorAll("[data-carousel]").forEach(initCarousel);
+</script>
+
+<style>
+  .services__header {
+    text-align: center;
+    max-width: 640px;
+    margin-inline: auto;
+    margin-bottom: var(--space-7);
+  }
+
+  .services__label {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    font-weight: var(--fw-medium);
+    margin: 0;
+  }
+
+  .services__heading {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    margin: var(--space-3) 0 0 0;
+    color: var(--text);
+  }
+
+  .services__panel {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-2);
+    padding: clamp(var(--space-5), 4vw, var(--space-8));
+    overflow: clip;
+  }
+
+  .services__panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(260px, 40%);
+    height: 4px;
+    background: var(--accent);
+    border-radius: var(--radius-full);
+  }
+
+  .services__track {
+    display: flex;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+    padding-inline: 9%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .services__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .services__track {
+      padding-inline: 0;
+    }
+  }
+
+  .services__card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    padding: var(--space-6);
+    min-height: 280px;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: var(--space-4);
+    text-align: center;
+    transition: opacity var(--dur) var(--ease),
+                transform var(--dur) var(--ease),
+                border-color var(--dur) var(--ease),
+                background-color var(--dur) var(--ease),
+                box-shadow var(--dur) var(--ease);
+    scroll-snap-align: center;
+    flex: 0 0 82%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 768px) {
+    .services__card {
+      flex: 0 0 calc((100% - var(--space-4)) / 2);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services__card {
+      flex: 0 0 calc((100% - 2 * var(--space-4)) / 3);
+    }
+  }
+
+  .services__card[data-active="false"] {
+    opacity: 0.45;
+  }
+
+  .services__card[data-active="true"] {
+    opacity: 1;
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+    box-shadow: var(--shadow-glow);
+  }
+
+  .services__card[data-active="true"] .services__card-title {
+    color: var(--accent-text);
+  }
+
+  .services__card-icon {
+    width: 88px;
+    height: 88px;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface-2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-text);
+  }
+
+  .services__card-title {
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text);
+    margin: 0;
+    transition: color var(--dur) var(--ease);
+  }
+
+  .services__card-desc {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    max-width: 30ch;
+    margin: 0;
+    line-height: var(--lh-body);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .services__card,
+    .services__card-title {
+      transition: none;
+    }
+    .services__card[data-active="true"] {
+      transform: none;
+    }
+  }
+</style>

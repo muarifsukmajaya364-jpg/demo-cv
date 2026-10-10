@@ -1,0 +1,136 @@
+---
+import Icon from "./icons/Icon.astro";
+import { ui } from "../data/ui.js";
+
+interface Props {
+  count: number;
+  itemLabel?: string;
+  prevLabel?: string;
+  nextLabel?: string;
+}
+
+const {
+  count = 0,
+  itemLabel = ui.carouselItem,
+  prevLabel = ui.carouselPrev,
+  nextLabel = ui.carouselNext,
+} = Astro.props;
+
+const initialActiveIndex = Math.floor(count / 2);
+---
+
+{count > 1 && (
+  <div class="carousel-controls">
+    <button
+      type="button"
+      class="carousel-controls__btn"
+      data-carousel-prev
+      aria-label={prevLabel}
+    >
+      <Icon name="chevron-left" size={20} />
+    </button>
+
+    <div class="carousel-controls__dots">
+      {Array.from({ length: count }).map((_, i) => (
+        <button
+          type="button"
+          class="carousel-controls__dot"
+          data-carousel-dot
+          aria-label={`${itemLabel} ${i + 1}`}
+          aria-current={i === initialActiveIndex ? "true" : undefined}
+        >
+          <span class="carousel-controls__dot-bar" />
+        </button>
+      ))}
+    </div>
+
+    <button
+      type="button"
+      class="carousel-controls__btn"
+      data-carousel-next
+      aria-label={nextLabel}
+    >
+      <Icon name="chevron-right" size={20} />
+    </button>
+  </div>
+)}
+
+<style>
+  .carousel-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  :global([data-carousel]:not([data-ready])) .carousel-controls {
+    display: none;
+  }
+
+  .carousel-controls__btn {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: border-color var(--dur) var(--ease),
+                color var(--dur) var(--ease);
+  }
+
+  .carousel-controls__btn:not(:disabled):hover {
+    border-color: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .carousel-controls__btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .carousel-controls__dots {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .carousel-controls__dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .carousel-controls__dot-bar {
+    display: block;
+    height: 4px;
+    width: 24px;
+    border-radius: var(--radius-full);
+    background-color: var(--border-strong);
+    transition: width var(--dur) var(--ease),
+                background-color var(--dur) var(--ease);
+  }
+
+  .carousel-controls__dot[aria-current="true"] .carousel-controls__dot-bar {
+    width: 40px;
+    background-color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-controls__btn,
+    .carousel-controls__dot-bar {
+      transition: none;
+    }
+  }
+</style>

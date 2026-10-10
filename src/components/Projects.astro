@@ -1,0 +1,385 @@
+---
+import { projects, projectsMeta } from "../data/projects.js";
+import { profile } from "../data/profile.js";
+import { ui } from "../data/ui.js";
+import { socialHref } from "../lib/links.js";
+import Button from "./Button.astro";
+import Icon from "./icons/Icon.astro";
+
+const hasProjects = Array.isArray(projects) && projects.length > 0;
+const meta = projectsMeta || {
+  label: "Karya Saya",
+  heading: "Project Terbaru",
+  viewLabel: "Lihat Detail",
+  allLabel: ui.filterAll,
+  cta: {
+    heading: "Punya project di pikiranmu?",
+    description: "Saya terbuka untuk project freelance.",
+    moreLabel: "Project Lainnya",
+    moreHref: "",
+    emailLabel: "Kirim Email",
+  },
+};
+
+const showFilter = hasProjects && projects.length > 6;
+const categories = showFilter
+  ? Array.from(
+      projects.reduce((map, p) => {
+        if (!map.has(p.category)) {
+          map.set(p.category, p.categoryLabel || p.category);
+        }
+        return map;
+      }, new Map())
+    ).map(([key, label]) => ({ key, label }))
+  : [];
+
+const emailHref = socialHref("email", profile.social?.email);
+const hasEmailBtn = Boolean(emailHref);
+const hasMoreBtn = Boolean(meta.cta?.moreHref);
+const showCtaBanner = hasEmailBtn || hasMoreBtn;
+---
+
+{hasProjects && (
+  <section id="projects" class="section" aria-labelledby="projects-heading">
+    <div class="container">
+      <div class="projects__header">
+        <p class="projects__label">{meta.label}</p>
+        <h2 id="projects-heading" class="projects__heading">{meta.heading}</h2>
+      </div>
+
+      {showFilter && (
+        <div class="projects__filter" role="group" aria-label={ui.filterLabel}>
+          <button
+            type="button"
+            class="projects__filter-btn"
+            data-filter="all"
+            aria-pressed="true"
+          >
+            {meta.allLabel}
+          </button>
+          {categories.map((cat) => (
+            <button
+              type="button"
+              class="projects__filter-btn"
+              data-filter={cat.key}
+              aria-pressed="false"
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <ul class="projects__list">
+        {projects.map((project) => {
+          const hasLink = Boolean(project.link);
+          const isExternal = hasLink && (project.link.startsWith("http://") || project.link.startsWith("https://"));
+
+          return (
+            <li
+              class:list={["project-card", hasLink && "project-card--has-action"]}
+              data-category={project.category}
+            >
+              <img
+                src={project.image}
+                alt={project.imageAlt}
+                width="320"
+                height="200"
+                loading="lazy"
+                decoding="async"
+                class="project-card__image"
+              />
+
+              <div class="project-card__content">
+                <span class="project-card__badge">{project.categoryLabel || project.category}</span>
+                <h3 class="project-card__title">{project.title}</h3>
+                <p class="project-card__desc">{project.description}</p>
+              </div>
+
+              {hasLink && (
+                <div class="project-card__action">
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    href={project.link}
+                    target={isExternal ? "_blank" : undefined}
+                    rel={isExternal ? "noopener noreferrer" : undefined}
+                  >
+                    <span>{meta.viewLabel}</span>
+                    <Icon name={isExternal ? "external-link" : "arrow-right"} size={16} />
+                  </Button>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+
+      {showCtaBanner && (
+        <div class="projects__cta">
+          <div class="projects__cta-text">
+            <h3 class="projects__cta-heading">{meta.cta.heading}</h3>
+            <p class="projects__cta-desc">{meta.cta.description}</p>
+          </div>
+
+          <div class="projects__cta-actions">
+            {hasMoreBtn && (
+              <Button variant="neutral" href={meta.cta.moreHref}>
+                {meta.cta.moreLabel}
+              </Button>
+            )}
+            {hasEmailBtn && (
+              <Button variant="primary" href={emailHref}>
+                <Icon name="email" size={18} />
+                <span>{meta.cta.emailLabel}</span>
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+)}
+
+<script>
+  const filterBtns = document.querySelectorAll(".projects__filter-btn");
+  const cards = document.querySelectorAll(".project-card");
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const filter = btn.getAttribute("data-filter");
+      filterBtns.forEach((b) => {
+        b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+      });
+
+      cards.forEach((card) => {
+        const category = card.getAttribute("data-category");
+        if (filter === "all" || category === filter) {
+          card.removeAttribute("hidden");
+        } else {
+          card.setAttribute("hidden", "");
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .projects__header {
+    text-align: center;
+    max-width: 640px;
+    margin-inline: auto;
+    margin-bottom: var(--space-7);
+  }
+
+  .projects__label {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    font-weight: var(--fw-medium);
+    margin: 0;
+  }
+
+  .projects__heading {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    margin: var(--space-3) 0 0 0;
+    color: var(--text);
+  }
+
+  .projects__filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  .projects__filter-btn {
+    border-radius: var(--radius-full);
+    padding: 8px 16px;
+    border: 1px solid var(--border-strong);
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+    min-height: 44px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color var(--dur) var(--ease),
+                border-color var(--dur) var(--ease),
+                color var(--dur) var(--ease);
+  }
+
+  .projects__filter-btn[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .projects__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: grid;
+    gap: var(--space-4);
+    box-sizing: border-box;
+    min-width: 0;
+    transition: border-color var(--dur) var(--ease);
+  }
+
+  .project-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  }
+
+  .project-card[hidden] {
+    display: none;
+  }
+
+  .project-card__image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    display: block;
+  }
+
+  .project-card__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .project-card__badge {
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent-text);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    display: inline-block;
+    width: fit-content;
+    font-weight: var(--fw-medium);
+  }
+
+  .project-card__title {
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-semibold);
+    color: var(--text);
+    line-height: var(--lh-tight);
+    margin: var(--space-2) 0 0 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .project-card__desc {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    margin: var(--space-2) 0 0 0;
+    line-height: var(--lh-body);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .project-card__action {
+    display: flex;
+    align-items: center;
+  }
+
+  @media (max-width: 767px) {
+    .project-card__action {
+      width: 100%;
+    }
+    .project-card__action :global(.btn) {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .project-card {
+      grid-template-columns: 200px 1fr;
+      align-items: center;
+      gap: var(--space-5);
+      padding: var(--space-5);
+    }
+
+    .project-card--has-action {
+      grid-template-columns: 200px 1fr auto;
+    }
+  }
+
+  .projects__cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-5);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+    margin-top: var(--space-7);
+    box-sizing: border-box;
+  }
+
+  .projects__cta-heading {
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-semibold);
+    color: var(--text);
+    line-height: var(--lh-tight);
+    margin: 0;
+  }
+
+  .projects__cta-desc {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    margin: var(--space-2) 0 0 0;
+    line-height: var(--lh-body);
+  }
+
+  .projects__cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  @media (max-width: 767px) {
+    .projects__cta {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .projects__cta-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .projects__cta-actions :global(.btn) {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .projects__filter-btn,
+    .project-card {
+      transition: none;
+    }
+  }
+</style>

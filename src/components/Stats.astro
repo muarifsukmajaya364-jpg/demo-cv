@@ -1,0 +1,85 @@
+---
+import { stats } from "../data/stats.js";
+import { ui } from "../data/ui.js";
+
+const hasStats = Array.isArray(stats) && stats.length > 0;
+const isFour = hasStats && stats.length === 4;
+---
+
+{hasStats && (
+  <section id="stats" class="stats" aria-label={ui.statsSectionLabel}>
+    <div class="container">
+      <div class:list={["stats__grid", isFour ? "stats__grid--four" : "stats__grid--auto"]}>
+        {stats.map((item) => (
+          <div class:list={["stats__box", item.highlight && "stats__box--highlight"]}>
+            <span class="stats__value">{item.value}</span>
+            <span class="stats__label">{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .stats {
+    background: var(--surface-2);
+    border-block: 1px solid var(--border);
+    padding-block: clamp(48px, 7vw, 80px);
+  }
+
+  .stats__grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .stats__grid--four {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    .stats__grid--four {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .stats__grid--auto {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+    justify-content: center;
+  }
+
+  .stats__box {
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: var(--space-6) var(--space-4);
+    min-height: 120px;
+    display: grid;
+    place-content: center;
+    gap: var(--space-2);
+    text-align: center;
+    background: transparent;
+    color: var(--text);
+    box-sizing: border-box;
+  }
+
+  .stats__value {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+
+  .stats__label {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  .stats__box--highlight {
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: var(--on-accent);
+  }
+
+  .stats__box--highlight .stats__label {
+    color: var(--on-accent);
+  }
+</style>

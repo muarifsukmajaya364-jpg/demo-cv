@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" fill="none">
+  <rect width="1280" height="800" fill="#f0fdfa"/>
+  <circle cx="1160" cy="120" r="160" fill="#99f6e4" opacity="0.45"/>
+  <circle cx="120" cy="700" r="140" fill="#99f6e4" opacity="0.35"/>
+  <!-- Browser Window -->
+  <rect x="110" y="70" width="1060" height="660" rx="20" fill="#ffffff" stroke="#0f766e" stroke-width="4"/>
+  <path d="M110 90C110 78.9543 118.954 70 130 70H1150C1161.05 70 1170 78.9543 1170 90V126H110V90Z" fill="#134e4a"/>
+  <circle cx="146" cy="98" r="9" fill="#f59e0b"/>
+  <circle cx="174" cy="98" r="9" fill="#14b8a6"/>
+  <circle cx="202" cy="98" r="9" fill="#99f6e4"/>
+  <rect x="250" y="86" width="520" height="24" rx="12" fill="#0f766e"/>
+  <!-- Hero Section inside browser -->
+  <rect x="150" y="156" width="980" height="220" rx="14" fill="#99f6e4"/>
+  <rect x="190" y="192" width="360" height="28" rx="8" fill="#134e4a"/>
+  <rect x="190" y="234" width="440" height="16" rx="6" fill="#0f766e"/>
+  <rect x="190" y="260" width="380" height="16" rx="6" fill="#0f766e"/>
+  <rect x="190" y="302" width="150" height="42" rx="10" fill="#f59e0b"/>
+  <!-- Cup illustration in hero -->
+  <circle cx="950" cy="266" r="78" fill="#f0fdfa"/>
+  <path d="M905 240H985V278C985 300.091 967.091 318 945 318C922.909 318 905 300.091 905 278V240Z" fill="#0f766e"/>
+  <path d="M985 250H998C1006.84 250 1014 257.163 1014 266C1014 274.837 1006.84 282 998 282H985V250Z" stroke="#134e4a" stroke-width="8"/>
+  <rect x="895" y="322" width="100" height="10" rx="5" fill="#134e4a"/>
+  <!-- 3 Menu Cards + Map Widget -->
+  <rect x="150" y="404" width="220" height="286" rx="12" fill="#f0fdfa" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="170" y="424" width="180" height="110" rx="8" fill="#14b8a6"/>
+  <rect x="170" y="554" width="140" height="18" rx="5" fill="#134e4a"/>
+  <rect x="170" y="582" width="180" height="12" rx="4" fill="#0f766e"/>
+  <rect x="170" y="638" width="90" height="28" rx="6" fill="#f59e0b"/>
+
+  <rect x="395" y="404" width="220" height="286" rx="12" fill="#f0fdfa" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="415" y="424" width="180" height="110" rx="8" fill="#0f766e"/>
+  <rect x="415" y="554" width="150" height="18" rx="5" fill="#134e4a"/>
+  <rect x="415" y="582" width="170" height="12" rx="4" fill="#14b8a6"/>
+  <rect x="415" y="638" width="90" height="28" rx="6" fill="#f59e0b"/>
+
+  <rect x="640" y="404" width="220" height="286" rx="12" fill="#f0fdfa" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="660" y="424" width="180" height="110" rx="8" fill="#14b8a6"/>
+  <rect x="660" y="554" width="130" height="18" rx="5" fill="#134e4a"/>
+  <rect x="660" y="582" width="175" height="12" rx="4" fill="#0f766e"/>
+  <rect x="660" y="638" width="90" height="28" rx="6" fill="#f59e0b"/>
+
+  <!-- Map Location Card -->
+  <rect x="885" y="404" width="245" height="286" rx="12" fill="#99f6e4"/>
+  <path d="M885 490L1130 560M960 404L1030 690" stroke="#ffffff" stroke-width="10"/>
+  <circle cx="1010" cy="525" r="28" fill="#f59e0b"/>
+  <circle cx="1010" cy="525" r="10" fill="#ffffff"/>
+</svg>

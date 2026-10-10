@@ -1,0 +1,101 @@
+---
+import { skills, skillsMeta } from "../data/skills.js";
+
+const hasSkills = Array.isArray(skills) && skills.length > 0;
+const meta = skillsMeta || { heading: "Tools dan Skill" };
+---
+
+{hasSkills && (
+  <section id="skills" class="section skills" aria-labelledby="skills-heading">
+    <div class="container">
+      <h2 id="skills-heading" class="skills__heading">{meta.heading}</h2>
+
+      <ul class="skills__list">
+        {skills.map((item) => (
+          <li class="skills__item">
+            <div class="skills__tile">
+              <span class="skills__short" aria-hidden="true">{item.short}</span>
+            </div>
+            <span class="skills__name">{item.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .skills__heading {
+    text-align: center;
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text);
+    margin: 0 0 var(--space-7) 0;
+  }
+
+  .skills__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-6) var(--space-5);
+  }
+
+  @media (max-width: 480px) {
+    .skills__list {
+      column-gap: var(--space-3);
+    }
+  }
+
+  .skills__item {
+    width: 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-2);
+  }
+
+  .skills__tile {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+
+  @media (hover: hover) {
+    .skills__item:hover .skills__tile {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+  }
+
+  .skills__short {
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-semibold);
+    color: var(--accent-text);
+    line-height: 1;
+  }
+
+  .skills__name {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    line-height: var(--lh-body);
+    word-break: break-word;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skills__tile {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>

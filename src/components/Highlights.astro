@@ -1,0 +1,106 @@
+---
+import { highlights } from "../data/highlights.js";
+import Icon from "./icons/Icon.astro";
+
+const hasItems = Array.isArray(highlights?.items) && highlights.items.length > 0;
+---
+
+{hasItems && (
+  <section id="about" class="section highlights" aria-labelledby="about-heading">
+    <div class="container">
+      <h2 id="about-heading" class="highlights__heading">{highlights.heading}</h2>
+
+      <div class="highlights__grid">
+        {highlights.items.map((item) => (
+          <div class="highlights__item">
+            <div class="highlights__ornament-outer" aria-hidden="true">
+              <div class="highlights__ornament-inner">
+                <Icon name={item.icon} size={32} />
+              </div>
+            </div>
+            <h3 class="highlights__title">{item.title}</h3>
+            <p class="highlights__desc">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .highlights__heading {
+    text-align: center;
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    margin: 0 0 var(--space-8) 0;
+    color: var(--text);
+  }
+
+  .highlights__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-7) var(--space-5);
+  }
+
+  @media (min-width: 640px) {
+    .highlights__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .highlights__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .highlights__item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .highlights__ornament-outer {
+    width: 112px;
+    height: 112px;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-full);
+    display: grid;
+    place-items: center;
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+
+  .highlights__ornament-inner {
+    width: 80px;
+    height: 80px;
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    border-radius: var(--radius-full);
+    display: grid;
+    place-items: center;
+    color: var(--accent-text);
+    box-sizing: border-box;
+  }
+
+  .highlights__title {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semibold);
+    color: var(--text);
+    margin-top: var(--space-5);
+    margin-bottom: 0;
+    line-height: var(--lh-tight);
+  }
+
+  .highlights__desc {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    max-width: 30ch;
+    margin-inline: auto;
+    margin-top: var(--space-2);
+    margin-bottom: 0;
+    line-height: var(--lh-body);
+  }
+</style>

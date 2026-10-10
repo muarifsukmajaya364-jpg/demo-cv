@@ -1,0 +1,220 @@
+---
+import { testimonials, testimonialsMeta } from "../data/testimonials.js";
+import { ui } from "../data/ui.js";
+import CarouselControls from "./CarouselControls.astro";
+import Icon from "./icons/Icon.astro";
+
+const hasTestimonials = Array.isArray(testimonials) && testimonials.length > 0;
+const meta = testimonialsMeta || {
+  label: "Testimoni",
+  heading: "Kata Mereka tentang Saya",
+};
+---
+
+{hasTestimonials && (
+  <section id="testimonials" class="section testimonials" aria-labelledby="testimonials-heading">
+    <div class="container">
+      <div class="testimonials__header">
+        <p class="testimonials__label">{meta.label}</p>
+        <h2 id="testimonials-heading" class="testimonials__heading">{meta.heading}</h2>
+      </div>
+
+      <div
+        class="testimonials__carousel"
+        data-carousel
+        data-start="0"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label={meta.heading}
+      >
+        <div class="testimonials__track" data-carousel-track>
+          {testimonials.map((item, i) => {
+            const hasPhoto = Boolean(item.photo);
+
+            return (
+              <figure
+                class:list={["testimonial-card", hasPhoto ? "testimonial-card--has-photo" : "testimonial-card--no-photo"]}
+                data-carousel-item
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${i + 1} dari ${testimonials.length}`}
+                data-active={i === 0 ? "true" : "false"}
+              >
+                {hasPhoto && (
+                  <div class="testimonial-card__media">
+                    <img
+                      src={item.photo}
+                      alt={item.name}
+                      width="220"
+                      height="275"
+                      loading="lazy"
+                      decoding="async"
+                      class="testimonial-card__img"
+                    />
+                  </div>
+                )}
+
+                <div class="testimonial-card__body">
+                  <div class="testimonial-card__quote-icon">
+                    <Icon name="quote" size={28} />
+                  </div>
+                  <blockquote class="testimonial-card__quote">
+                    <p>{item.quote}</p>
+                  </blockquote>
+                  <figcaption class="testimonial-card__caption">
+                    <span class="testimonial-card__name">{item.name}</span>
+                    <span class="testimonial-card__role">{item.role}</span>
+                  </figcaption>
+                </div>
+              </figure>
+            );
+          })}
+        </div>
+
+        <CarouselControls
+          count={testimonials.length}
+          itemLabel={ui.testimonialsItem}
+          prevLabel={ui.testimonialsPrev}
+          nextLabel={ui.testimonialsNext}
+        />
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .testimonials__header {
+    text-align: center;
+    max-width: 640px;
+    margin-inline: auto;
+    margin-bottom: var(--space-7);
+  }
+
+  .testimonials__label {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    font-weight: var(--fw-medium);
+    margin: 0;
+  }
+
+  .testimonials__heading {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text);
+    margin: var(--space-3) 0 0 0;
+  }
+
+  .testimonials__carousel {
+    position: relative;
+    max-width: 860px;
+    margin-inline: auto;
+  }
+
+  .testimonials__track {
+    display: flex;
+    gap: var(--space-4);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-block: var(--space-2);
+  }
+
+  .testimonials__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .testimonial-card {
+    flex: 0 0 100%;
+    margin: 0;
+    scroll-snap-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .testimonial-card__media {
+    max-width: 200px;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .testimonial-card__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    display: block;
+  }
+
+  .testimonial-card__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .testimonial-card__quote-icon {
+    color: var(--accent-text);
+    margin-bottom: var(--space-3);
+  }
+
+  .testimonial-card__quote {
+    margin: 0;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-body);
+    color: var(--text);
+    font-style: normal;
+  }
+
+  .testimonial-card__caption {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .testimonial-card__name {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semibold);
+    color: var(--accent-text);
+  }
+
+  .testimonial-card__role {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 768px) {
+    .testimonial-card--has-photo {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      align-items: center;
+      gap: var(--space-6);
+      padding: var(--space-6);
+    }
+
+    .testimonial-card--has-photo .testimonial-card__media {
+      max-width: 220px;
+      margin-inline: 0;
+    }
+
+    .testimonial-card--no-photo {
+      padding: var(--space-6);
+    }
+  }
+</style>
+
+<script>
+  import { initCarousel } from "../lib/carousel.js";
+
+  document.querySelectorAll("#testimonials [data-carousel]").forEach(initCarousel);
+</script>

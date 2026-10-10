@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" fill="none">
+  <rect width="1280" height="800" fill="#f0fdfa"/>
+  <!-- Browser Frame -->
+  <rect x="80" y="60" width="1120" height="680" rx="20" fill="#ffffff" stroke="#134e4a" stroke-width="4"/>
+  <path d="M80 80C80 68.9543 88.9543 60 100 60H1180C1191.05 60 1200 68.9543 1200 80V114H80V80Z" fill="#134e4a"/>
+  <circle cx="116" cy="87" r="8" fill="#f59e0b"/>
+  <circle cx="142" cy="87" r="8" fill="#14b8a6"/>
+  <circle cx="168" cy="87" r="8" fill="#99f6e4"/>
+  <!-- Sidebar -->
+  <path d="M82 114H280V738H100C89.5 738 82 730 82 720V114Z" fill="#0f766e"/>
+  <rect x="112" y="150" width="136" height="24" rx="8" fill="#99f6e4"/>
+  <rect x="112" y="206" width="116" height="16" rx="6" fill="#f0fdfa" opacity="0.85"/>
+  <rect x="112" y="242" width="128" height="16" rx="6" fill="#f0fdfa" opacity="0.55"/>
+  <rect x="112" y="278" width="104" height="16" rx="6" fill="#f0fdfa" opacity="0.55"/>
+  <rect x="112" y="314" width="120" height="16" rx="6" fill="#f0fdfa" opacity="0.55"/>
+  <!-- Top Metric Cards -->
+  <rect x="320" y="148" width="260" height="120" rx="14" fill="#99f6e4"/>
+  <rect x="348" y="174" width="90" height="36" rx="8" fill="#134e4a"/>
+  <rect x="348" y="226" width="160" height="14" rx="5" fill="#0f766e"/>
+
+  <rect x="605" y="148" width="260" height="120" rx="14" fill="#f0fdfa" stroke="#14b8a6" stroke-width="3"/>
+  <rect x="633" y="174" width="110" height="36" rx="8" fill="#0f766e"/>
+  <rect x="633" y="226" width="170" height="14" rx="5" fill="#134e4a"/>
+
+  <rect x="890" y="148" width="270" height="120" rx="14" fill="#f0fdfa" stroke="#f59e0b" stroke-width="3"/>
+  <rect x="918" y="174" width="80" height="36" rx="8" fill="#f59e0b"/>
+  <rect x="918" y="226" width="180" height="14" rx="5" fill="#134e4a"/>
+
+  <!-- Task List Panel (Left) -->
+  <rect x="320" y="298" width="490" height="404" rx="14" fill="#f0fdfa" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="350" y="328" width="200" height="22" rx="6" fill="#134e4a"/>
+  <!-- Task rows -->
+  <rect x="350" y="374" width="430" height="62" rx="10" fill="#ffffff"/>
+  <circle cx="384" cy="405" r="14" fill="#14b8a6"/>
+  <rect x="414" y="392" width="220" height="14" rx="5" fill="#134e4a"/>
+  <rect x="414" y="414" width="130" height="10" rx="4" fill="#0f766e"/>
+  <rect x="690" y="393" width="68" height="24" rx="12" fill="#99f6e4"/>
+
+  <rect x="350" y="452" width="430" height="62" rx="10" fill="#ffffff"/>
+  <circle cx="384" cy="483" r="14" fill="#14b8a6"/>
+  <rect x="414" y="470" width="250" height="14" rx="5" fill="#134e4a"/>
+  <rect x="414" y="492" width="150" height="10" rx="4" fill="#0f766e"/>
+  <rect x="690" y="471" width="68" height="24" rx="12" fill="#f59e0b"/>
+
+  <rect x="350" y="530" width="430" height="62" rx="10" fill="#ffffff"/>
+  <circle cx="384" cy="561" r="14" stroke="#0f766e" stroke-width="4"/>
+  <rect x="414" y="548" width="190" height="14" rx="5" fill="#134e4a"/>
+  <rect x="414" y="570" width="120" height="10" rx="4" fill="#0f766e"/>
+  <rect x="690" y="549" width="68" height="24" rx="12" fill="#99f6e4"/>
+
+  <rect x="350" y="608" width="430" height="62" rx="10" fill="#ffffff"/>
+  <circle cx="384" cy="639" r="14" stroke="#0f766e" stroke-width="4"/>
+  <rect x="414" y="626" width="210" height="14" rx="5" fill="#134e4a"/>
+  <rect x="414" y="648" width="140" height="10" rx="4" fill="#0f766e"/>
+  <rect x="690" y="627" width="68" height="24" rx="12" fill="#14b8a6"/>
+
+  <!-- Progress Bar Chart Panel (Right) -->
+  <rect x="835" y="298" width="325" height="404" rx="14" fill="#f0fdfa" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="865" y="328" width="170" height="22" rx="6" fill="#134e4a"/>
+  <!-- Vertical Bars -->
+  <rect x="880" y="520" width="36" height="140" rx="8" fill="#14b8a6"/>
+  <rect x="938" y="440" width="36" height="220" rx="8" fill="#0f766e"/>
+  <rect x="996" y="480" width="36" height="180" rx="8" fill="#14b8a6"/>
+  <rect x="1054" y="390" width="36" height="270" rx="8" fill="#f59e0b"/>
+  <line x1="865" y1="660" x2="1125" y2="660" stroke="#134e4a" stroke-width="4" stroke-linecap="round"/>
+</svg>

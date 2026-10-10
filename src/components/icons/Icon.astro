@@ -1,0 +1,43 @@
+---
+import { icons } from '../../lib/icons.js';
+
+interface Props {
+  name: string;
+  size?: number;
+  label?: string;
+}
+
+const { name, size = 20, label = "" } = Astro.props;
+const inner = icons[name];
+---
+<!-- Glyph generik, bentuk dasar mengikuti Lucide (lisensi ISC). Bukan logo resmi merek. -->
+{inner && (
+  label ? (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      role="img"
+      aria-label={label}
+      set:html={inner}
+    />
+  ) : (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      set:html={inner}
+    />
+  )
+)}
