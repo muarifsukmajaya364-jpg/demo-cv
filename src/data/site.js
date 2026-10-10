@@ -20,7 +20,7 @@ export const site = {
   description:
     "Portofolio demo Nadia Ramadhani, mahasiswa Sistem Informasi yang membuat situs web dan desain antarmuka. Situs ini contoh template Flux dengan data fiktif.",
   lang: "id",
-  url: "",
+  url: "https://nadiascvdemo.netlify.app",
   ogImage: "/images/og.png",
   theme: {
     mode: "light", // "dark" | "light"
